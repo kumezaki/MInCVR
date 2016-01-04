@@ -507,6 +507,9 @@ public class Instantiation : MonoBehaviour {
 		PluginFunc_SetOctave(playerID_char, playerID_char.Length, octave);
 		#endif
 		SendPlayerParamValue("octave", playerID, octave);
+
+		GameObject.Find ("/InfoCanvas/Panel/8va Button").GetComponent<Button> ().interactable = octave < 2;
+		GameObject.Find ("/InfoCanvas/Panel/8vb Button").GetComponent<Button> ().interactable = octave > -2;
 	}
 	
 	void SetSelfSpeed() {
@@ -515,6 +518,9 @@ public class Instantiation : MonoBehaviour {
 		PluginFunc_SetSpeed(playerID_char, playerID_char.Length, speed);
 		#endif
 		SendPlayerParamValue("speed", playerID, speed);
+
+		GameObject.Find ("/InfoCanvas/Panel/2x Button").GetComponent<Button> ().interactable = speed < 1;
+		GameObject.Find ("/InfoCanvas/Panel/2^-1x Button").GetComponent<Button> ().interactable = speed > -1;
 	}
 	
 	void AddObject(float angle)
