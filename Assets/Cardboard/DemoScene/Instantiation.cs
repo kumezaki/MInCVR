@@ -510,6 +510,11 @@ public class Instantiation : MonoBehaviour {
 
 		GameObject.Find ("/InfoCanvas/Panel/8va Button").GetComponent<Button> ().interactable = octave < 2;
 		GameObject.Find ("/InfoCanvas/Panel/8vb Button").GetComponent<Button> ().interactable = octave > -2;
+
+		GameObject go = GameObject.Find ("/InfoCanvas/Panel/Octave Panel");
+		Vector3 v3 = go.GetComponent<Transform> ().localPosition;
+		v3.y = 0.5f * octave;
+		go.GetComponent<Transform> ().localPosition = v3;
 	}
 	
 	void SetSelfSpeed() {
@@ -521,6 +526,11 @@ public class Instantiation : MonoBehaviour {
 
 		GameObject.Find ("/InfoCanvas/Panel/2x Button").GetComponent<Button> ().interactable = speed < 1;
 		GameObject.Find ("/InfoCanvas/Panel/2^-1x Button").GetComponent<Button> ().interactable = speed > -1;
+
+		GameObject go = GameObject.Find ("/InfoCanvas/Panel/Speed Panel");
+		Vector3 v3 = go.GetComponent<Transform> ().localPosition;
+		v3.y = 1.0f * speed;
+		go.GetComponent<Transform> ().localPosition = v3;
 	}
 	
 	void AddObject(float angle)
