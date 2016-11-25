@@ -1,2 +1,8 @@
 UnityTest_pre5.3.zip
 UnityTest/*
+Assets/*
+Library/*
+Library/metadata/*
+UnityTest_old/*
+Temp/*
+Temp/UnityTempFile*
