@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#define NEW_SCENE
+
+using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Linq;
@@ -132,6 +134,11 @@ public class Instantiation : MonoBehaviour {
 		else
 			Debug.Log ("PluginFunc_StartAudioEngine " + "dummy value");
 		#endif
+
+		#if NEW_SCENE
+		GameObject plane = GameObject.Find ("/Plane");
+		DestroyImmediate (plane);
+		#endif
 	}
 
 	void Update()
@@ -192,10 +199,11 @@ public class Instantiation : MonoBehaviour {
 					go.GetComponent<Transform> ().Rotate (0,angle_degrees,0);
 				}
 
+				#if !NEW_SCENE
 				go.GetComponentInChildren<TextMesh> ().text = entry.Key
 					+ "\n"
 					+ player.SeqPos_Cur.ToString();
-#if false				
+#if false
 					+ "\n"
 					+ prox_C.ToString()
 					+ "\n"
@@ -205,6 +213,7 @@ public class Instantiation : MonoBehaviour {
 					+ "\n"
 					+ v3.x + ", " + v3.y + ", " + v3.z;
 #endif
+				#endif
 			}
 		}
 	}
@@ -544,8 +553,10 @@ public class Instantiation : MonoBehaviour {
 		float angle_degrees = angle / (2.0f * Mathf.PI) * 360.0f;
 		go.GetComponent<Transform> ().Rotate (0,-angle_degrees,0);
 
+		#if !NEW_SCENE
 		go.GetComponentInChildren<TextMesh> ().GetComponent<Renderer> ().enabled = false;
 		go.GetComponentInChildren<ParticleSystem> ().GetComponent<Renderer> ().enabled = false;
+		#endif
 	}
 
 	void DeleteObject()
@@ -636,7 +647,9 @@ public class Instantiation : MonoBehaviour {
 
 					bool playing = player.SeqPos_Cur > 0;
 //					go.GetComponent<Renderer>().enabled = playing;
+					#if !NEW_SCENE
 					go.GetComponentInChildren<ParticleSystem> ().GetComponent<Renderer> ().enabled = playing;
+					#endif
 				}
 				
 				/* seq speed */
@@ -681,7 +694,11 @@ public class Instantiation : MonoBehaviour {
 
 	float SeqPosToHeight(int seq_num)
 	{
+		#if NEW_SCENE
+		return 0.0f;
+		#else
 		return seq_num * 0.5f + 0.5f;
+		#endif
 	}
 
 	void UpdateSelfHeight()
