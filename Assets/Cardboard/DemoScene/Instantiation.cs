@@ -1,4 +1,4 @@
-﻿#define NEW_SCENE
+﻿#define SCENE_SPHERES_ONLY
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -77,6 +77,10 @@ public class Instantiation : MonoBehaviour {
 	#if UNITY_IPHONE
 	[DllImport ("__Internal")]
 	#endif
+	private static extern float PluginFunc_GetPlayerPeakAmp (char[] player_id, int length);
+	#if UNITY_IPHONE
+	[DllImport ("__Internal")]
+	#endif
 	private static extern int PluginFunc_SetScore (char[] score_text, int length);
 	#if UNITY_IPHONE
 	[DllImport ("__Internal")]
@@ -135,7 +139,7 @@ public class Instantiation : MonoBehaviour {
 			Debug.Log ("PluginFunc_StartAudioEngine " + "dummy value");
 		#endif
 
-		#if NEW_SCENE
+		#if SCENE_SPHERES_ONLY
 		GameObject plane = GameObject.Find ("/Plane");
 		DestroyImmediate (plane);
 		#endif
@@ -199,7 +203,7 @@ public class Instantiation : MonoBehaviour {
 					go.GetComponent<Transform> ().Rotate (0,angle_degrees,0);
 				}
 
-				#if !NEW_SCENE
+				#if !SCENE_SPHERES_ONLY
 				go.GetComponentInChildren<TextMesh> ().text = entry.Key
 					+ "\n"
 					+ player.SeqPos_Cur.ToString();
@@ -553,7 +557,7 @@ public class Instantiation : MonoBehaviour {
 		float angle_degrees = angle / (2.0f * Mathf.PI) * 360.0f;
 		go.GetComponent<Transform> ().Rotate (0,-angle_degrees,0);
 
-		#if !NEW_SCENE
+		#if !SCENE_SPHERES_ONLY
 		go.GetComponentInChildren<TextMesh> ().GetComponent<Renderer> ().enabled = false;
 		go.GetComponentInChildren<ParticleSystem> ().GetComponent<Renderer> ().enabled = false;
 		#endif
@@ -647,7 +651,7 @@ public class Instantiation : MonoBehaviour {
 
 					bool playing = player.SeqPos_Cur > 0;
 //					go.GetComponent<Renderer>().enabled = playing;
-					#if !NEW_SCENE
+					#if !SCENE_SPHERES_ONLY
 					go.GetComponentInChildren<ParticleSystem> ().GetComponent<Renderer> ().enabled = playing;
 					#endif
 				}
@@ -679,8 +683,21 @@ public class Instantiation : MonoBehaviour {
 					#endif
 				}
 
+				#if SCENE_SPHERES_ONLY
+				Color c = Color.black;
+				float v = 0.0f;
+				#if !UNITY_EDITOR
+				float amp = PluginFunc_GetPlayerPeakAmp(playerID_char, playerID_char.Length);
+				float db = 20.0f * (float)Math.Log10(amp);
+				v = (db + 90.0f) / 90.0f;
+				v = v < 0.0f ? 0.0f: v;
+				#endif
+				c.g = v;
+				go.GetComponent<Renderer>().material.color = c;
+				#else
 				/* like ? */
 				go.GetComponent<Renderer>().material.color = player.Like == 1 ? Color.red : Color.white;
+				#endif
 			}
 			
 			Debug.Log("player "+entry.Key+
@@ -694,7 +711,7 @@ public class Instantiation : MonoBehaviour {
 
 	float SeqPosToHeight(int seq_num)
 	{
-		#if NEW_SCENE
+		#if SCENE_SPHERES_ONLY
 		return 0.0f;
 		#else
 		return seq_num * 0.5f + 0.5f;
